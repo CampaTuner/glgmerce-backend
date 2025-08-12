@@ -32,7 +32,7 @@ module.exports.login = async (req, res) => {
             }
         }
     } catch (err) {
-        return res.status(500).json({ messge: "Internal Server Error", success: false });
+        return res.status(500).json({ message: "Internal Server Error", success: false });
     }
 
 }
@@ -41,19 +41,19 @@ module.exports.Register = async (req, res) => {
     try {
         let { name, email, password, cpassword, phone } = req.body;
         if (!name || !email || !password || !cpassword || !phone) {
-            return res.status(400).json({ messge: "Please fill all fields", success: false });
+            return res.status(400).json({ message: "Please fill all fields", success: false });
         } else if (password !== cpassword) {
             return res.status(400).json({
-                messge: "Password and Confirm Password are not same", success: false
+                message: "Password and Confirm Password are not same", success: false
             });
         } else {
             let buyer = await Buyer.find({ $or: [{ email: email }, { phone: phone }] })
             if (buyer.length > 0) {
-                return res.status(400).json({ messge: "Email or Phone already exist", success: false });
+                return res.status(400).json({ message: "Email or Phone already exist", success: false });
             } else {
                 let hasshedPassword = await bycrypt.hash(password, 10)
                 if (phone.length !== 10) {
-                    return res.status(400).json({ messge: "Invalid Phone Number", success: false });
+                    return res.status(400).json({ message: "Invalid Phone Number", success: false });
                 }
                 let newBuyer = await Buyer.create({
                     name: name,
@@ -62,10 +62,10 @@ module.exports.Register = async (req, res) => {
                     phone: phone
                 })
                 delete newBuyer._doc.password
-                return res.status(201).json({ messge: "Buyer Registered Successfully", success: true, newBuyer });
+                return res.status(201).json({ message: "Buyer Registered Successfully", success: true, newBuyer });
             }
         }
     } catch (err) {
-        return res.status(500).json({ messge: "Internal Server Error", success: false });
+        return res.status(500).json({ message: "Internal Server Error", success: false });
     }
 }

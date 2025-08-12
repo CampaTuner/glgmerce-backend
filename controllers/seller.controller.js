@@ -40,19 +40,19 @@ module.exports.Register = async (req, res) => {
     try {
         let { name, email, password, cpassword, phone, address } = req.body;
         if (!name || !email || !password || !cpassword || !phone || !address) {
-            return res.status(400).json({ messge: "Please fill all fields", success: false });
+            return res.status(400).json({ message: "Please fill all fields", success: false });
         } else if (password !== cpassword) {
             return res.status(400).json({
-                messge: "Password and Confirm Password are not same", success: false
+                message: "Password and Confirm Password are not same", success: false
             });
         } else {
             let seller = await Seller.find({ $or: [{ email: email }, { phone: phone }] })
             if (seller.length > 0) {
-                return res.status(400).json({ messge: "Email or Phone already exist", success: false });
+                return res.status(400).json({ message: "Email or Phone already exist", success: false });
             } else {
                 let hasshedPassword = await bycrypt.hash(password, 10)
                 if (phone.length !== 10) {
-                    return res.status(400).json({ messge: "Invalid Phone Number", success: false });
+                    return res.status(400).json({ message: "Invalid Phone Number", success: false });
                 }
                 let newSeller = await Seller.create({
                     name: name,
@@ -62,10 +62,10 @@ module.exports.Register = async (req, res) => {
                     address: address
                 })
                 delete newSeller._doc.password
-                return res.status(201).json({ messge: "Seller Registered Successfully", success: true, newSeller });
+                return res.status(201).json({ message: "Seller Registered Successfully", success: true, newSeller });
             }
         }
     } catch (err) {
-        return res.status(500).json({ messge: "Internal Server Error", success: false });
+        return res.status(500).json({ message: "Internal Server Error", success: false });
     }
 }
