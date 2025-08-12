@@ -3,9 +3,14 @@ let app = express()
 let dotenv = require('dotenv')
 dotenv.config()
 const connectDB = require('./config/db.config')
+const cors = require('cors')
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(cors({
+    origin: '*',
+}))
+
 
 let buyerRoute = require('./routes/buyer.route')
 app.use('/api/buyer', buyerRoute)
