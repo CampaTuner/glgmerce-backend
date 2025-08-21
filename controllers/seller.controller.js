@@ -69,3 +69,14 @@ module.exports.Register = async (req, res) => {
         return res.status(500).json({ message: "Internal Server Error", success: false });
     }
 }
+
+module.exports.Profile = async (req, res) => {
+    const sId = req.user.id
+    try {
+        let data = await Seller.findById(bId)
+        delete data._doc.password
+        return res.send({ message: "Seller profile", success: true, data })
+    } catch (error) {
+        return res.status(500).json({ message: "Internal Server Error", success: false });
+    }
+}
