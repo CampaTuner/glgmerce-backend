@@ -21,6 +21,19 @@ module.exports.createProduct = async (req, res) => {
     }
 
 }
+module.exports.singleProduct = async (req, res) => {
+    try {
+        let id = req.params.id;
+        let product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found", success: false });
+        }
+        return res.status(200).json({ message: "Product found", success: true, product: product });
+    } catch (error) {
+        return res.status(500).json({ message: "Internal Server Error", success: false });
+    }
+}
+
 module.exports.AllProduct = async (req, res) => {
     try {
         let products = await Product.find()
